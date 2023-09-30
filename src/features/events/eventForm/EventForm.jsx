@@ -1,36 +1,101 @@
-import React from "react";
+import cuid from "cuid";
+import React, { useState } from "react";
 import { Button, Form, Header, Segment } from "semantic-ui-react";
 
-export default function EventForm({setFormOpen}) {
-    return (
-        <Segment clearing>
+export default function EventForm({ setFormOpen, setEvents, createEvent }) {
+  const intialValues = {
+    title: "",
+    category: "",
+    description: "",
+    city: "",
+    venue: "",
+    date: "",
+  };
 
-            <Header content="Create new event" />
-            <Form>
-                <Form.Field>
-                    <input type="text" placeholder="Event title" />
-                </Form.Field>
-                <Form.Field>
-                    <input type="text" placeholder="Category" />
-                </Form.Field>
-                <Form.Field>
-                    <input type="text" placeholder="Description" />
-                </Form.Field>
-                <Form.Field>
-                    <input type="text" placeholder="City" />
-                </Form.Field>
-                <Form.Field>
-                    <input type="text" placeholder="Venue" />
-                </Form.Field>
-                <Form.Field>
-                    <input type="date" placeholder="Date" />
-                </Form.Field>
+  const [values, setValues] = useState(intialValues);
 
-                <Button type="submit" floated="right" positive content="Submit" />
-                <Button onClick={() => setFormOpen(false) } floated="right" content="Cancel" />
+  function handleFormSubmit() {
+    createEvent({
+      ...values,
+      id: cuid(),
+      hostedBy: "Bob",
+      attendees: [],
+      hostPhotoURL: "/assets/user.png",
+    });
+    setFormOpen(false);
+  }
 
-            </Form>
+  function handleInputChange(e) {
+    const { name, value } = e.target;
+    setValues({ ...values, [name]: value });
+  }
 
-        </Segment>
-    );
+  return (
+    <Segment clearing>
+      <Header content="Create new event" />
+      <Form onSubmit={handleFormSubmit}>
+        <Form.Field>
+          <input
+            type="text"
+            placeholder="Event title"
+            value={values.title}
+            name="title"
+            onChange={(e) => handleInputChange(e)}
+          />
+        </Form.Field>
+        <Form.Field>
+          <input
+            type="text"
+            placeholder="Category"
+            value={values.category}
+            name="category"
+            onChange={(e) => handleInputChange(e)}
+          />
+        </Form.Field>
+        <Form.Field>
+          <input
+            type="text"
+            placeholder="Description"
+            value={values.description}
+            name="description"
+            onChange={(e) => handleInputChange(e)}
+          />
+        </Form.Field>
+        <Form.Field>
+          <input
+            type="text"
+            placeholder="City"
+            value={values.city}
+            name="city"
+            onChange={(e) => handleInputChange(e)}
+          />
+        </Form.Field>
+        <Form.Field>
+          <input
+            type="text"
+            placeholder="Venue"
+            value={values.venue}
+            name="venue"
+            onChange={(e) => handleInputChange(e)}
+          />
+        </Form.Field>
+        <Form.Field>
+          <input
+            type="date"
+            placeholder="Date"
+            value={values.date}
+            name="date"
+            onChange={(e) => handleInputChange(e)}
+          />
+        </Form.Field>
+
+        <Button type="submit" floated="right" positive content="Submit" />
+        <Button
+          onClick={() => setFormOpen(false)}
+          floated="right"
+          content="Cancel"
+        />
+      </Form>
+    </Segment>
+  );
 }

@@ -24,7 +24,7 @@ export default function EventListItem({event}) {
       </Segment>
       <Segment secondary>
         <List horizontal>
-          {event.attendees.map(attendee => (
+          {event.attendees?.map(attendee => (
             <EventListAttendee attendee={attendee} key={attendee.id} />
           ))}
         </List>
